@@ -4,6 +4,7 @@ import products.FoodProduct;
 import products.DeliveredProduct;
 import policies.FoodPolicy;
 import policies.NonFoodPolicy;
+import products.StockProduct;
 import store.inventory.Inventory;
 import store.staff.Cashier;
 import store.staff.StaffManagement;
@@ -35,17 +36,21 @@ public class Store implements Serializable {
         this.nonFoodMarkupPolicy = nonFoodMarkupPolicy;
         this.paydesks = paydesks;
 
+
+        // remove expired products
+        inventory.removeExpiredStock();
+
         // calculate sell prices for goods
         calculateGoodsPrices();
     }
 
     public void calculateGoodsPrices(){
-        for(DeliveredProduct good : inventory.getGoods()){
-            if(good instanceof FoodProduct){
-                good.setSellPrice(foodMarkupPolicy.finalPrice(good.getDeliveryPrice(), ((FoodProduct) good).getExpiryDate()));
+        for(StockProduct product : inventory.getStockProducts()){
+            if(product.getProduct() instanceof FoodProduct){
+                product.getProduct() .setSellPrice(foodMarkupPolicy.finalPrice(product.getProduct() .getDeliveryPrice(), ((FoodProduct) product.getProduct() ).getExpiryDate()));
             }
             else{
-                good.setSellPrice(nonFoodMarkupPolicy.calculatePrice(good.getDeliveryPrice()));
+                product.getProduct() .setSellPrice(nonFoodMarkupPolicy.calculatePrice(product.getProduct() .getDeliveryPrice()));
             }
         }
     }
@@ -58,11 +63,12 @@ public class Store implements Serializable {
         }
         return totalRevenue;
     }
+
     public void totalStoreExpensesAndProfit() {
         BigDecimal totalExpenses= staffManagement.totalStaffExpenses().add(inventory.totalGoodsDeliveryExpenses());
         BigDecimal totalRevenue = totalPaydeskRevenue();
 
-        System.out.println("> Total Expenses:");
+        System.out.println("\n> " + storeName + " Total Expenses:");
         System.out.printf("  - Staff Salaries:          $%,10.2f\n", staffManagement.totalStaffExpenses());
         System.out.printf("  - Inventory Value:         $%,10.2f\n", inventory.totalGoodsDeliveryExpenses());
         System.out.println("  -------------------------------");

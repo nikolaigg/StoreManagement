@@ -68,7 +68,11 @@ public class Paydesk implements Serializable {
     public boolean storeReceipt(Receipt receipt) {
         return storedReceipts.add(receipt);
     }
-
+    public void printReceipts() {
+        for (Receipt receipt : storedReceipts) {
+            System.out.println(receipt);
+        }
+    }
     public TransactionService getTransactionService() {
         return transactionService;
     }

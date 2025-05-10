@@ -1,22 +1,25 @@
 package customer;
 
-import products.DeliveredProduct;
+import products.StockProduct;
 
-public class CartItem {
-    private DeliveredProduct good;
+import java.io.Serializable;
+
+public class CartItem implements Serializable {
+    private static final long serialVersionUID = 11111L;
+    private StockProduct product;
     private int amount;
 
-    public CartItem(DeliveredProduct good, int amount) {
-        this.good = good;
+    public CartItem(StockProduct product, int amount) {
+        this.product = product;
         this.amount = amount;
     }
 
-    public DeliveredProduct getGood() {
-        return good;
+    public StockProduct getCartItemProduct() {
+        return product;
     }
 
-    public void setGood(DeliveredProduct good) {
-        this.good = good;
+    public void setCartItemProduct(StockProduct product) {
+        this.product = product;
     }
 
     public int getAmount() {
@@ -30,7 +33,7 @@ public class CartItem {
     @Override
     public String toString() {
         return "CartItem{" +
-                "good=" + good +
+                "product=" + product +
                 ", amount=" + amount +
                 '}';
     }

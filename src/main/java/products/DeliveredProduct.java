@@ -12,14 +12,12 @@ public abstract class DeliveredProduct implements Serializable {
     private String name;
     private BigDecimal deliveryPrice;
     private BigDecimal sellPrice;
-    private int quantity;
 
-    public DeliveredProduct(String name, BigDecimal deliveryPrice, int quantity) {
+    public DeliveredProduct(String name, BigDecimal deliveryPrice) {
         this.id = idCounter++;
         this.name = name;
         this.deliveryPrice = deliveryPrice;
         this.sellPrice = BigDecimal.ZERO;
-        this.quantity = quantity;
     }
 
     public int getId() {
@@ -51,13 +49,6 @@ public abstract class DeliveredProduct implements Serializable {
     }
 
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
 
     @Override
     public String toString() {
@@ -66,7 +57,6 @@ public abstract class DeliveredProduct implements Serializable {
                 ", name='" + name + '\'' +
                 ", deliveryPrice=" + deliveryPrice +
                 ", sellPrice=" + sellPrice +
-                ", quantity=" + quantity +
                 '}';
     }
 

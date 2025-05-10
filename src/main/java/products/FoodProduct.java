@@ -8,8 +8,8 @@ public class FoodProduct extends DeliveredProduct {
 
     private LocalDate expiryDate;
 
-    public FoodProduct(String name, BigDecimal deliveryPrice, int quantity, LocalDate expiryDate) {
-        super(name, deliveryPrice, quantity);
+    public FoodProduct(String name, BigDecimal deliveryPrice, LocalDate expiryDate) {
+        super(name, deliveryPrice);
         this.expiryDate = expiryDate;
     }
 

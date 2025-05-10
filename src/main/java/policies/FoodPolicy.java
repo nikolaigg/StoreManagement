@@ -1,12 +1,14 @@
 package policies;
 
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class FoodPolicy implements PricingPolicy {
+public class FoodPolicy implements PricingPolicy, Serializable {
+    private static final long serialVersionUID = 57547451L;
 
     private int markup;
     private int expiryDiscount;

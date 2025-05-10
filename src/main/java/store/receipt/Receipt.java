@@ -33,54 +33,68 @@ public class Receipt implements Serializable {
         return id;
     }
 
-    public void writeToFile(String fileName) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-
-            writer.write("--------------------------------------------\n");
-            writer.write("                RECEIPT\n");
-            writer.write("--------------------------------------------\n");
-            writer.write("Receipt ID: " + id + "\n");
-            writer.write("Store: " + store.getStoreName()+ "\n");
-            writer.write("Issued by: " + cashierIssuedBy.getName() + " #" + cashierIssuedBy.getId() + "\n");
-            writer.write(issuedOn+ "\n");
-            writer.write("\n");
-            writer.write("--------------------------------------------\n");
-            writer.write("Items Purchased:\n");
-            writer.write("--------------------------------------------\n");
-            writer.write("ID     | Item Name          | Price   | Quantity | Total\n");
-            writer.write("------------------------------------------------------\n");
-
-            for (CartItem item : boughtItems) {
-                writer.write(String.format("%-6s| %-18s| %-8.2f| %-9d| %.2f\n",
-                        item.getGood().getId(),
-                        item.getGood().getName(),
-                        item.getGood().getSellPrice(),
-                        item.getAmount(),
-                        item.getGood().getSellPrice().multiply(BigDecimal.valueOf(item.getAmount()))));
-            }
-
-            writer.write("--------------------------------------------\n");
-            writer.write("TOTAL:                                " + String.format("%.2f", totalPrice) + "\n");
-            writer.write("--------------------------------------------\n");
-            writer.write("\nThank you for shopping with us!\n");
-            writer.write("--------------------------------------------\n");
-        } catch (IOException e) {
-            System.out.println("Error writing receipt to file: " + e.getMessage());
-        }
+    public static int getIdCounter() {
+        return idCounter;
     }
 
-    public static void readFromFile(String fileName) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading receipt from file: " + e.getMessage());
-        }
+    public static void setIdCounter(int idCounter) {
+        Receipt.idCounter = idCounter;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
+    }
+
+    public Cashier getCashierIssuedBy() {
+        return cashierIssuedBy;
+    }
+
+    public void setCashierIssuedBy(Cashier cashierIssuedBy) {
+        this.cashierIssuedBy = cashierIssuedBy;
+    }
+
+    public String getIssuedOn() {
+        return issuedOn;
+    }
+
+    public void setIssuedOn(String issuedOn) {
+        this.issuedOn = issuedOn;
+    }
+
+    public ArrayList<CartItem> getBoughtItems() {
+        return boughtItems;
+    }
+
+    public void setBoughtItems(ArrayList<CartItem> boughtItems) {
+        this.boughtItems = boughtItems;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "Receipt{" +
+                "id=" + id +
+                ", store=" + store +
+                ", cashierIssuedBy=" + cashierIssuedBy +
+                ", issuedOn='" + issuedOn + '\'' +
+                ", boughtItems=" + boughtItems +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
 }
 

@@ -1,14 +1,16 @@
 import customer.CartItem;
 import exceptions.UnavailableStockRuntimeException;
 import exceptions.UnavailableStockException;
-import products.DeliveredProduct;
+import products.FoodProduct;
 import products.NonFoodProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import products.StockProduct;
 import store.inventory.Inventory;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,18 +19,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class InventoryTest {
 
     private Inventory inventory;
-    private DeliveredProduct product;
-    private DeliveredProduct product2;
+    private StockProduct product1;
+    private StockProduct product2;
 
     @BeforeEach
     public void setUp() {
-        product = Mockito.mock(DeliveredProduct.class);
-        product2 = new NonFoodProduct("Test", BigDecimal.valueOf(100), 10);
-        ArrayList<DeliveredProduct> deliveredProductList = new ArrayList<>();
-        deliveredProductList.add(product);
-        deliveredProductList.add(product2);
+        product1 = Mockito.mock(StockProduct.class);
+        product2 = new StockProduct(new NonFoodProduct("Test", BigDecimal.valueOf(100)), 10);
+        ArrayList<StockProduct> stockProductsList = new ArrayList<>();
+        stockProductsList.add(product1);
+        stockProductsList.add(product2);
 
-        inventory = new Inventory(deliveredProductList);
+        inventory = new Inventory(stockProductsList);
     }
 
     @Test
@@ -36,7 +38,7 @@ public class InventoryTest {
         int negativeAmount = -1;
 
         assertThrows(IllegalArgumentException.class, () -> {
-            inventory.stockUp(product, negativeAmount);
+            inventory.stockUp(product1, negativeAmount);
         });
 
     }
@@ -44,11 +46,11 @@ public class InventoryTest {
     // amount ne e nai dobrata logika
     @Test
     public void testStockingUpProductNotInInventory(){
-        DeliveredProduct productNotInInventory = new NonFoodProduct("Test", BigDecimal.valueOf(100), 5);
+        StockProduct productNotInInventory = new StockProduct(new NonFoodProduct("Test", BigDecimal.valueOf(100)),5);
 
         inventory.stockUp(productNotInInventory, 10);
 
-        assertTrue(inventory.getGoods().contains(productNotInInventory));
+        assertTrue(inventory.getStockProducts().contains(productNotInInventory));
         assertEquals(10, productNotInInventory.getQuantity());
     }
 
@@ -64,7 +66,7 @@ public class InventoryTest {
 
     @Test
     public void testReducingStockOfProductNotInInventory() {
-        DeliveredProduct productNotFound = Mockito.mock(DeliveredProduct.class);
+        StockProduct productNotFound = Mockito.mock(StockProduct.class);
 
         assertThrows(UnavailableStockRuntimeException.class, () -> {
             inventory.reduceStock(productNotFound, 1);
@@ -75,7 +77,7 @@ public class InventoryTest {
         int negativeAmount = -1;
 
         assertThrows(IllegalArgumentException.class, () -> {
-            inventory.reduceStock(product, negativeAmount);
+            inventory.reduceStock(product1, negativeAmount);
         });
     }
 
@@ -88,10 +90,21 @@ public class InventoryTest {
         assertEquals(expected, product2.getQuantity());
     }
 
+    @Test
+    public void testRemovingExpiredProductFromInventory_ReturnsTrue() {
+        StockProduct expiredProduct = new StockProduct(new FoodProduct("Test", BigDecimal.valueOf(100), LocalDate.of(2024,1,1)), 10);
+        inventory.stockUp(expiredProduct, 5);
+
+        inventory.removeExpiredStock();
+
+        assertTrue(!inventory.getStockProducts().contains(expiredProduct));
+    }
+
     // TO DO - FIX
     @Test
     public void checkForUnavailableItems_ThrowsException(){
-        CartItem testItem = new CartItem(new NonFoodProduct("Test2", BigDecimal.valueOf(100), 10), 5);
+        StockProduct unavailableStockProduct = new StockProduct(new NonFoodProduct("Test", BigDecimal.valueOf(100)),10);
+        CartItem testItem = new CartItem(unavailableStockProduct,10);
         ArrayList<CartItem> items = new ArrayList<>();
         items.add(testItem);
 

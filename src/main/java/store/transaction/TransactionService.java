@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import static store.receipt.ReceiptFileHandler.writeToFile;
+
 public class TransactionService implements Serializable {
     private static final long serialVersionUID = 10L;
 
@@ -31,7 +33,7 @@ public class TransactionService implements Serializable {
 
     public void reduceStock(Inventory inventory, ArrayList<CartItem> shoppingCart) {
         for(CartItem cartItem : shoppingCart) {
-            inventory.reduceStock(cartItem.getGood(),cartItem.getAmount());
+            inventory.reduceStock(cartItem.getCartItemProduct(),cartItem.getAmount());
         }
     }
 
@@ -57,6 +59,6 @@ public class TransactionService implements Serializable {
         );
         paydesk.setTotalAmount(paydesk.getTotalAmount().add(customer.shoppingCartTotal()));
         paydesk.storeReceipt(receipt);
-        receipt.writeToFile("D:\\JAVA\\JavaDirectory\\Store\\src\\main\\receipts\\receipt" + receipt.getId() + "_" + issuedOn + ".txt");
+        writeToFile("D:\\JAVA\\JavaDirectory\\Store\\src\\main\\receipts\\receipt" + receipt.getId() + "_" + issuedOn + ".txt", receipt);
     }
 }

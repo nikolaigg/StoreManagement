@@ -6,44 +6,45 @@ import exceptions.InvalidStockRequestException;
 import exceptions.UnavailableStockRuntimeException;
 import exceptions.UnavailableStockException;
 import products.FoodProduct;
-import products.DeliveredProduct;
+import products.StockProduct;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Inventory implements Serializable {
     private static final long serialVersionUID = 5L;
 
-    private ArrayList<DeliveredProduct> goods;
+    private ArrayList<StockProduct> products;
 
-    public Inventory(ArrayList<DeliveredProduct> goods) {
-        this.goods = goods;
+    public Inventory(ArrayList<StockProduct> products) {
+        this.products = products;
     }
     public BigDecimal totalGoodsDeliveryExpenses(){
         BigDecimal total = BigDecimal.ZERO;
-        for (DeliveredProduct good : goods) {
-            total = total.add(good.getDeliveryPrice());
+        for (StockProduct product : products) {
+            total = total.add(product.getProduct().getDeliveryPrice());
         }
         return total;
 
     }
 
-    public void printInventory() {
-        System.out.println("================= STORE INVENTORY =================");
+    public void printInventory(String storeName) {
+        System.out.println("\n================= " + storeName + "'s Inventory =================");
         System.out.printf("%-5s| %-18s| %-9s| %-8s| %-5s| %-12s\n",
                 "ID", "Name", "Category", "Price", "Qty", "Expiry Date");
         System.out.println("---------------------------------------------------------------");
 
-        for (DeliveredProduct good: goods) {
-            String foodCategory = good instanceof FoodProduct ? "Food" : "Non-Food";
-            String expiryDate = good instanceof FoodProduct ? ((FoodProduct) good).getExpiryDate().toString() : "N/A";
+        for (StockProduct product: products) {
+            String foodCategory = product.getProduct() instanceof FoodProduct ? "Food" : "Non-Food";
+            String expiryDate = product.getProduct() instanceof FoodProduct ? ((FoodProduct) product.getProduct()).getExpiryDate().toString() : "N/A";
             System.out.printf("%-5d| %-18s| %-9s| $%-7.2f| %-5d| %-12s\n",
-                    good.getId(), good.getName(), foodCategory, good.getSellPrice(), good.getQuantity(), expiryDate);
+                    product.getProduct().getId(), product.getProduct().getName(), foodCategory, product.getProduct().getSellPrice(), product.getQuantity(), expiryDate);
         }
 
-        System.out.println("===============================================================");
+        System.out.println("===============================================================\n");
     }
 
     public void checkForUnavailableItems(ArrayList<CartItem> shoppingCart) {
@@ -51,8 +52,8 @@ public class Inventory implements Serializable {
         while (iterator.hasNext()) {
             CartItem item = iterator.next();
             try {
-                if (!this.getGoods().contains(item.getGood())) {
-                    throw new UnavailableStockException("Item " + item.getGood() + " is not available in our store");
+                if (!this.getStockProducts().contains(item.getCartItemProduct())) {
+                    throw new UnavailableStockException("Item " + item.getCartItemProduct() + " is not available in our store");
                 }
             } catch (UnavailableStockException e) {
                 System.out.println(e.getMessage());
@@ -67,20 +68,20 @@ public class Inventory implements Serializable {
         while (iterator.hasNext()) {
             CartItem item = iterator.next();
             try{
-                if(item.getAmount() > item.getGood().getQuantity()){
-                    throw new InsufficientStockException("We only have " + item.getGood().getQuantity() + " of "+ item.getGood().getName() + " in stock" +
-                            "\n" + (item.getAmount() -item.getGood().getQuantity() ) + " less than desired");
+                if(item.getAmount() > item.getCartItemProduct().getQuantity()){
+                    throw new InsufficientStockException("We only have " + item.getCartItemProduct().getQuantity() + " of "+ item.getCartItemProduct().getProduct().getName() + " in stock" +
+                            "\n" + (item.getAmount() -item.getCartItemProduct().getQuantity() ) + " less than desired");
                 }
             } catch (InsufficientStockException e) {
                 System.out.println(e.getMessage());
                 System.out.println("Selling you what we have left...");
-                item.setAmount(item.getGood().getQuantity());
+                item.setAmount(item.getCartItemProduct().getQuantity());
             }
         }
     }
 
-    public void reduceStock(DeliveredProduct good, int amount) {
-        if(!goods.contains(good)) {
+    public void reduceStock(StockProduct product, int amount) {
+        if(!products.contains(product)) {
             throw new UnavailableStockRuntimeException("No such stock in store");
         }
         if(amount <= 0)
@@ -88,40 +89,61 @@ public class Inventory implements Serializable {
             throw new IllegalArgumentException("Products cannot have negative quantity");
         }
 
-        if(amount > good.getQuantity()) {
+        if(amount > product.getQuantity()) {
             throw new InvalidStockRequestException("Cannot reduce stock by amount more than available");
         }
 
-        good.setQuantity(good.getQuantity() - amount);
+        product.setQuantity(product.getQuantity() - amount);
     }
 
-    public void stockUp(DeliveredProduct good, int amount) {
+    public void stockUp(StockProduct product, int amount) {
         if(amount <= 0) {
             throw new IllegalArgumentException("Products cannot have negative quantity");
         }
 
-        if(!goods.contains(good)) {
-            good.setQuantity(amount);
-            goods.add(good);
+        if(!products.contains(product)) {
+            product.setQuantity(amount);
+            products.add(product);
         }
         else{
-            good.setQuantity(good.getQuantity() + amount);
+            product.setQuantity(product.getQuantity() + amount);
         }
 
     }
 
-    public ArrayList<DeliveredProduct> getGoods() {
-        return goods;
+    public boolean removeExpiredStock() {
+        LocalDate today = LocalDate.now();
+        Iterator<StockProduct> iterator = products.iterator();
+        while (iterator.hasNext()) {
+            StockProduct product = iterator.next();
+            if (product.getProduct() instanceof FoodProduct food && !food.getExpiryDate().isAfter(today)) {
+                iterator.remove();
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void setGoods(ArrayList<DeliveredProduct> goods) {
-        this.goods = goods;
+    public StockProduct getStockProductById(int id) {
+        for(StockProduct product : products) {
+            if(product.getProduct().getId() == id) {
+                return product;
+            }
+        }
+        return null;
+    }
+    public ArrayList<StockProduct> getStockProducts() {
+        return products;
+    }
+
+    public void setStockProducts(ArrayList<StockProduct> products) {
+        this.products = products;
     }
 
     @Override
     public String toString() {
         return "Inventory{" +
-                "goods=" + goods +
+                "goods=" + products +
                 '}';
     }
 }

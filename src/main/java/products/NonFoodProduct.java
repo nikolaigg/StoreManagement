@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 public class NonFoodProduct extends DeliveredProduct {
     private static final long serialVersionUID = 8L;
 
-    public NonFoodProduct(String name, BigDecimal deliveryPrice, int quantity) {
-        super(name, deliveryPrice, quantity);
+    public NonFoodProduct(String name, BigDecimal deliveryPrice) {
+        super(name, deliveryPrice);
     }
 
     @Override

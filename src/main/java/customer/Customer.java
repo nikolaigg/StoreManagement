@@ -1,6 +1,6 @@
 package customer;
 
-import products.DeliveredProduct;
+import products.StockProduct;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,14 +15,14 @@ public class Customer {
         this.shoppingCart = new ArrayList<>();
     }
 
-    public boolean addToShoppingCart(DeliveredProduct item, int amount) {
+    public boolean addToShoppingCart(StockProduct item, int amount) {
         return shoppingCart.add(new CartItem(item, amount));
     }
     public BigDecimal shoppingCartTotal() {
         BigDecimal total = BigDecimal.ZERO;
         for(CartItem item : shoppingCart) {
             for(int i = 0; i < item.getAmount(); i++) {
-                total = total.add(item.getGood().getSellPrice());
+                total = total.add(item.getCartItemProduct().getProduct().getSellPrice());
             }
         }
         return total;
