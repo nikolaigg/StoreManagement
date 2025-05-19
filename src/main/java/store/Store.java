@@ -1,7 +1,6 @@
 package store;
 
 import products.FoodProduct;
-import products.DeliveredProduct;
 import policies.FoodPolicy;
 import policies.NonFoodPolicy;
 import products.StockProduct;
@@ -10,11 +9,13 @@ import store.staff.Cashier;
 import store.staff.StaffManagement;
 import store.transaction.Paydesk;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Store implements Serializable {
+    @Serial
     private static final long serialVersionUID = 4L;
 
     private String storeName;

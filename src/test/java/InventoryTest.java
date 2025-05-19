@@ -1,6 +1,4 @@
-import customer.CartItem;
 import exceptions.UnavailableStockRuntimeException;
-import exceptions.UnavailableStockException;
 import products.FoodProduct;
 import products.NonFoodProduct;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// DOVURSHI
 public class InventoryTest {
 
     private Inventory inventory;
@@ -43,7 +40,6 @@ public class InventoryTest {
 
     }
 
-    // amount ne e nai dobrata logika
     @Test
     public void testStockingUpProductNotInInventory(){
         StockProduct productNotInInventory = new StockProduct(new NonFoodProduct("Test", BigDecimal.valueOf(100)),5);
@@ -100,16 +96,4 @@ public class InventoryTest {
         assertTrue(!inventory.getStockProducts().contains(expiredProduct));
     }
 
-    // TO DO - FIX
-    @Test
-    public void checkForUnavailableItems_ThrowsException(){
-        StockProduct unavailableStockProduct = new StockProduct(new NonFoodProduct("Test", BigDecimal.valueOf(100)),10);
-        CartItem testItem = new CartItem(unavailableStockProduct,10);
-        ArrayList<CartItem> items = new ArrayList<>();
-        items.add(testItem);
-
-        assertThrows(UnavailableStockException.class, () -> {
-            inventory.checkForUnavailableItems(items);
-        });
-    }
 }

@@ -1,11 +1,12 @@
 package policies;
 
-
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class NonFoodPolicy implements PricingPolicy, Serializable {
+    @Serial
     private static final long serialVersionUID = 63451L;
 
     private int markup;

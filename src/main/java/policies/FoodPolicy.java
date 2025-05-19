@@ -1,6 +1,6 @@
 package policies;
 
-
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class FoodPolicy implements PricingPolicy, Serializable {
+    @Serial
     private static final long serialVersionUID = 57547451L;
 
     private int markup;

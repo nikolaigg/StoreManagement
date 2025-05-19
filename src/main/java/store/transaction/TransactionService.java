@@ -1,11 +1,11 @@
 package store.transaction;
 
-
 import customer.CartItem;
 import customer.Customer;
 import store.inventory.Inventory;
 import store.receipt.Receipt;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import static store.receipt.ReceiptFileHandler.writeToFile;
 
 public class TransactionService implements Serializable {
+    @Serial
     private static final long serialVersionUID = 10L;
 
     public boolean process(Customer customer, Inventory inventory, Paydesk paydesk) {

@@ -5,10 +5,12 @@ import exceptions.NoCashierOnPaydeskException;
 import store.transaction.Paydesk;
 import store.Store;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class Cashier implements Serializable {
+    @Serial
     private static final long serialVersionUID = 2L;
     private static int idCounter = 1;
 

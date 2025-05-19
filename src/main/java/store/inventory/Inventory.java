@@ -8,6 +8,7 @@ import exceptions.UnavailableStockException;
 import products.FoodProduct;
 import products.StockProduct;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Inventory implements Serializable {
+    @Serial
     private static final long serialVersionUID = 5L;
 
     private ArrayList<StockProduct> products;

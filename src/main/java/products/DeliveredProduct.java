@@ -1,10 +1,11 @@
 package products;
 
-
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public abstract class DeliveredProduct implements Serializable {
+    @Serial
     private static final long serialVersionUID = 6L;
     private static int idCounter = 1;
 

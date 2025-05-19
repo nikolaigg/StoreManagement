@@ -2,10 +2,13 @@ package customer;
 
 import products.StockProduct;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class CartItem implements Serializable {
+    @Serial
     private static final long serialVersionUID = 11111L;
+
     private StockProduct product;
     private int amount;
 

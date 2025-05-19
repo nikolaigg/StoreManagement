@@ -5,11 +5,13 @@ import store.inventory.Inventory;
 import store.receipt.Receipt;
 import store.staff.Cashier;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Paydesk implements Serializable {
+    @Serial
     private static final long serialVersionUID = 3L;
     private static int idCounter = 1;
 

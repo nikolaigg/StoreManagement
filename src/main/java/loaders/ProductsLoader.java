@@ -1,14 +1,13 @@
 package loaders;
 
 import products.FoodProduct;
-import products.DeliveredProduct;
 import products.NonFoodProduct;
 import products.StockProduct;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 
 public class ProductsLoader {
 
@@ -63,9 +62,6 @@ public class ProductsLoader {
     }
 
     private static ArrayList<StockProduct> addProducts(StockProduct... products) {
-        ArrayList<StockProduct> stockProductsList = new ArrayList<>();
-        Collections.addAll(stockProductsList, products);
-
-        return stockProductsList;
+        return new ArrayList<>(Arrays.asList(products));
     }
 }

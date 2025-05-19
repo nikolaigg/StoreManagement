@@ -2,11 +2,13 @@ package store.staff;
 
 import store.transaction.Paydesk;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class StaffManagement implements Serializable {
+    @Serial
     private static final long serialVersionUID = 9L;
 
     private ArrayList<Cashier> cashiers;

@@ -7,6 +7,7 @@ import policies.NonFoodPolicy;
 import products.StockProduct;
 import store.*;
 import store.inventory.Inventory;
+import store.receipt.ReceiptFileHandler;
 import store.receipt.ReceiptSerializationDeserialization;
 import store.staff.Cashier;
 import store.staff.StaffManagement;
@@ -19,7 +20,10 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        // load products
+       // delete all previous files
+       ReceiptFileHandler.deleteAllTxtFiles("src/main/receipts");
+
+       // load products
        ArrayList<StockProduct> products = ProductsLoader.loadProducts();
 
        // init inventory
@@ -69,15 +73,16 @@ public class Main {
        // Selling products
        cashier1.sellProducts(c1);
 
+       // Store inventory
        System.out.println("\nStore inventory after selling:");
        store.getInventory().printInventory(store.getStoreName());
 
 
+       // Store expenses
        store.totalStoreExpensesAndProfit();
 
-
        // Serialization && Deserialization
-       String serReceiptFilePath = "D:\\JAVA\\JavaDirectory\\Store\\src\\main\\ser\\receipt.ser";
+       String serReceiptFilePath = "src/main/ser/receipt.ser";
        ReceiptSerializationDeserialization receiptService = new ReceiptSerializationDeserialization();
 
        receiptService.serialize(serReceiptFilePath,paydesk1.getStoredReceipts().get(0));
@@ -86,7 +91,8 @@ public class Main {
        System.out.println(receiptService.deserialize(serReceiptFilePath));
 
 
-       // ReceiptFileHandler.readAllTextFilesInFolder("D:\\JAVA\\JavaDirectory\\Store\\src\\main\\receipts");
+       // Read all receipts
+       // ReceiptFileHandler.readAllTextFilesInFolder("src/main/receipts");
     }
 
 }

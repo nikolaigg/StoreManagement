@@ -1,9 +1,6 @@
     package store.receipt;
 
     import customer.CartItem;
-    import store.Store;
-    import store.staff.Cashier;
-
     import java.io.*;
     import java.math.BigDecimal;
     import java.nio.file.Files;
@@ -85,5 +82,29 @@
                 System.err.println("Invalid folder path: " + folderPath);
             }
 
+        }
+
+        public static void deleteAllTxtFiles(String folderPath) {
+            File folder = new File(folderPath);
+
+            if (!folder.exists() || !folder.isDirectory()) {
+                System.out.println("The provided path is not a valid directory.");
+                return;
+            }
+
+            File[] files = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+
+            if (files == null || files.length == 0) {
+                System.out.println("No .txt files found in the directory.");
+                return;
+            }
+
+            for (File file : files) {
+                if (file.delete()) {
+                    System.out.println("Deleted: " + file.getName());
+                } else {
+                    System.out.println("Failed to delete: " + file.getName());
+                }
+            }
         }
     }

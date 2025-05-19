@@ -1,10 +1,12 @@
 package products;
 
-
+import java.io.Serial;
 import java.io.Serializable;
 
 public class StockProduct implements Serializable{
+    @Serial
     private static final long serialVersionUID = 141241412L;
+
     private DeliveredProduct product;
     private int quantity;
 

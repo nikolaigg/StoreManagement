@@ -1,9 +1,11 @@
 package products;
 
+import java.io.Serial;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class FoodProduct extends DeliveredProduct {
+    @Serial
     private static final long serialVersionUID = 7L;
 
     private LocalDate expiryDate;

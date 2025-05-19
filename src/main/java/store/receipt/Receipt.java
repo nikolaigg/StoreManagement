@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class Receipt implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private static int idCounter = 1;
 
